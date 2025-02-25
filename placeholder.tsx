@@ -6,7 +6,7 @@ export const homeFeed = [
     createdBy: "atlas-lumi",
   },
   {
-    image: "https://placedog.net/400x400?id=2",
+    image: "https://i.imgur.com/t6N7fS0.jpeg",
     caption: "This is a caption 2",
     id: "2",
     createdBy: "atlas-lumi",
@@ -33,7 +33,7 @@ export const homeFeed = [
 
 export const favoritesFeed = [
   {
-    image: "https://placedog.net/400x400?id=6",
+    image: "https://i.imgur.com/Ef27f0g.jpeg",
     caption: "This is a caption 6",
     id: "6",
     createdBy: "atlas-lumi",
