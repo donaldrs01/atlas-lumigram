@@ -4,6 +4,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { TextInput } from "react-native-gesture-handler";
 
+
 export default function Page() {
     const router = useRouter();
     const colorScheme = useColorScheme(); // Grab current theme
@@ -30,7 +31,7 @@ export default function Page() {
             { /* Sign In Button */}
             <Pressable
                 style={styles.signInButton}
-                onPress={() => router.replace("/(tabs)")}
+                onPress={() => router.replace("/(tabs)/home")}
             >
                 <Text style={styles.signInText}>Sign In</Text>
             </Pressable>
