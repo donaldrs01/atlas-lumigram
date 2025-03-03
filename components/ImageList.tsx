@@ -56,20 +56,19 @@ export default function ImageList({ data }: ImageListProps) {
       keyExtractor={(item) => item.id}
       estimatedItemSize={150}
       extraData={showCaptions} // Force re-render when state changes
-      contentContainerStyle={{ paddingBottom: 20 }}
     />
   );
 }
 
 const styles = StyleSheet.create({
   imageContainer: {
-    marginBottom: 15,
     alignItems: "center",
+    marginBottom: 5,
   },
   image: {
     width: "100%",
     height: 250,
-    borderRadius: 10,
+    borderRadius: 6,
   },
   captionOverlay: {
     position: "absolute",
