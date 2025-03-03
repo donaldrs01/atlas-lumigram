@@ -2,15 +2,16 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import  Constants  from "expo-constants";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCsKI7puA4z_qr1igjoJ0IxDxkd5mB84t4",
-    authDomain: "atlas-lumigram.firebaseapp.com",
-    projectId: "atlas-lumigram",
-    storageBucket: "atlas-lumigram.firebasestorage.app",
-    messagingSenderId: "978746231167",
-    appId: "1:978746231167:web:4c45a17404beb23de6f24a",
-    measurementId: "G-41QMNJ754N"
+    apiKey: Constants.expoConfig?.extra?.firebaseApiKey,
+    authDomain: Constants.expoConfig?.extra?.firebaseAuthDomain,
+    projectId: Constants.expoConfig?.extra?.firebaseProjectId,
+    storageBucket: Constants.expoConfig?.extra?.firebaseStorageBucket,
+    messagingSenderId: Constants.expoConfig?.extra?.firebaseMessagingSenderId,
+    appId: Constants.expoConfig?.extra?.firebaseAppId,
+    measurementId: Constants.expoConfig?.extra?.firebaseMeasurementId,
 };
 
 const app = initializeApp(firebaseConfig);

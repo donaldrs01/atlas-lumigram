@@ -40,6 +40,15 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "firebaseApiKey": "AIzaSyCsKI7puA4z_qr1igjoJ0IxDxkd5mB84t4",
+      "firebaseAuthDomain": "atlas-lumigram.firebaseapp.com",
+      "firebaseProjectId": "atlas-lumigram",
+      "firebaseStorageBucket": "atlas-lumigram.appspot.com",
+      "firebaseMessagingSenderId": "978746231167",
+      "firebaseAppId": "1:978746231167:web:4c45a17404beb23de6f24a",
+      "firebaseMeasurementId": "G-41QMNJ754N"
     }
   }
 }

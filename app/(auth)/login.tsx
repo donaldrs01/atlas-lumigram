@@ -3,7 +3,7 @@ import { Link, useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { TextInput } from "react-native-gesture-handler";
-
+import DebugScreen from "@/components/DebugScreen";
 
 export default function Page() {
     const router = useRouter();
