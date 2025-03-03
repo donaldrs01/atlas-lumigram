@@ -1,14 +1,29 @@
-import { Text, View, Pressable, StyleSheet, Image, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
+import React, { useState } from "react";
+import { Text, View, Pressable, StyleSheet, Image, Alert, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { TextInput } from "react-native-gesture-handler";
-import DebugScreen from "@/components/DebugScreen";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
 
-export default function Page() {
+export default function LoginPage() {
     const router = useRouter();
-    const colorScheme = useColorScheme(); // Grab current theme
     const theme = Colors.dark;
+
+    // State to store user credentials
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const handleLogin = async () => {
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            router.replace("/(tabs)/home"); // Redirect to homepage after successful login
+        } catch (error: any) {
+            setError(error.message);
+            Alert.alert("Login attempt failed", error.message);
+        }
+    };
 
     return (
         <View style={[styles.container, {backgroundColor: theme.background }]}>
@@ -16,22 +31,30 @@ export default function Page() {
             <Image source={require("@/assets/images/logo.png")} style={styles.logo} resizeMode="contain" />
             { /* Login Text */ }
             <Text style={styles.loginText}>Login</Text>
+            { /* Login Error Message */ }
+            {error? <Text style={styles.errorText}>{error}</Text> : null}
             { /* Input Fields */}
             <TextInput
                 style={[styles.input, { backgroundColor: theme.background }]}
                 placeholder="Email"
                 placeholderTextColor={theme.icon}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
             />
             <TextInput
                 style={[styles.input, { backgroundColor: theme.background }]}
                 placeholder="Password"
                 placeholderTextColor={theme.icon}
                 secureTextEntry={true}
+                value={password}
+                onChangeText={setPassword}
             />
             { /* Sign In Button */}
             <Pressable
                 style={styles.signInButton}
-                onPress={() => router.replace("/(tabs)/home")}
+                onPress={handleLogin}
             >
                 <Text style={styles.signInText}>Sign In</Text>
             </Pressable>
@@ -87,5 +110,10 @@ const styles = StyleSheet.create({
     },
     createAccountText: {
         color: "white"
+    },
+    errorText: {
+        color: "red",
+        textAlign: "center",
+        marginBottom: 10,
     }
 })
