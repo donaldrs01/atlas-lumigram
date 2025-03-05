@@ -7,7 +7,7 @@ type Post = {
     createdAt: Date;
     createdBy: string;
 }
-
+// Blah
 const posts = collection(db, 'posts');
 
 async function addPost(post: Post) {
