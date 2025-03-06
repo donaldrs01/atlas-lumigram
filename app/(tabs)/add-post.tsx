@@ -12,6 +12,9 @@ export default function Page() {
     const {image, openImagePicker, reset} = useImagePicker();
 
     async function save() {
+        
+        if (loading) return;
+
         if (!image) {
             alert("Select an image.");
             return;
@@ -49,6 +52,12 @@ export default function Page() {
         }
     }
 
+    function handleReset() {
+        setCaption("");
+        reset();
+        setLoading(false);
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.footerContainer}>
@@ -71,7 +80,7 @@ export default function Page() {
                             <Text style={{ color:"white"}}>Save</Text>
                         </Pressable>
 
-                        <Pressable style={styles.resetButton} onPress={reset}>
+                        <Pressable style={styles.resetButton} onPress={handleReset}>
                             <Text style={{ fontWeight:"600" }}>Reset</Text>
                         </Pressable>
                     </View>
@@ -104,7 +113,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     saveButton: {
-        backgroundColor: "#1ED2AF",
+        backgroundColor: "#17B89E",
         width: "80%",
         borderRadius: 8,
         alignItems: "center",

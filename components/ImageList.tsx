@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, Alert } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-reanimated";
+import { getAuth } from "firebase/auth";
+import firestore from "@/lib/firestore";
 
 interface ImageListProps {
-  data: { image: string; caption: string; id: string; createdBy: string }[];
+  data: { image: string; caption: string; id: string; createdBy: string, createdAt: Date }[];
 }
 
 export default function ImageList({ data }: ImageListProps) {
   // Create boolean value to toggle caption on/off on long press
   const [showCaptions, setShowCaptions] = useState<{ [key: string]: boolean }>({});
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  // Fetch user favorites on startup
+  useEffect(() => {
+    async function loadFavorites() {
+      if (user) {
+        const userFavorites = await firestore.getUserFavorites();
+        setFavorites(userFavorites);
+      }
+    }
+    loadFavorites();
+  }, []);
 
   const handleLongPress = (id: string) => {
     // Update state by toggling the current image's boolean value
@@ -20,11 +36,20 @@ export default function ImageList({ data }: ImageListProps) {
     }));
   };
 
-  const handleDoubleTap = () => {
-    Alert.alert("Image favorited!");
+  const handleDoubleTap = async (post: { image: string, caption: string, id: string; createdBy: string, createdAt: Date }) => {    
+    // Remove from favorites if already in collection
+    if (favorites.includes(post.id)) {
+      await firestore.removeFromFavorites(post.id);
+      setFavorites(favorites.filter((fave) => fave !== post.id));
+      Alert.alert("Removed from favorites!");
+    } else {
+      await firestore.addToFavorites(post);
+      setFavorites([...favorites, post.id]);
+      Alert.alert("Added to favorites!");
+    }
   };
 
-  const renderItem = ({ item }: { item: { image: string; caption: string; id: string; createdBy: string } }) => {
+  const renderItem = ({ item }: { item: { image: string; caption: string; id: string; createdBy: string; createdAt: Date } }) => {
     // Define gestures
     const longPress = Gesture.LongPress()
       .runOnJS(true)
@@ -33,7 +58,7 @@ export default function ImageList({ data }: ImageListProps) {
     const doubleTap = Gesture.Tap()
       .numberOfTaps(2)
       .runOnJS(true)
-      .onEnd(() => runOnJS(handleDoubleTap)());
+      .onEnd(() => runOnJS(handleDoubleTap)({...item }));
 
     return (
       <GestureDetector gesture={Gesture.Simultaneous(doubleTap, longPress)}>
@@ -54,7 +79,7 @@ export default function ImageList({ data }: ImageListProps) {
       data={data} // Accepts different datasets (homeFeed, favoritesFeed)
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
-      estimatedItemSize={150}
+      estimatedItemSize={250}
       extraData={showCaptions} // Force re-render when state changes
     />
   );
@@ -62,13 +87,14 @@ export default function ImageList({ data }: ImageListProps) {
 
 const styles = StyleSheet.create({
   imageContainer: {
+    width: "100%",
     alignItems: "center",
-    marginBottom: 5,
   },
   image: {
     width: "100%",
     height: 250,
     borderRadius: 6,
+    resizeMode: "cover",
   },
   captionOverlay: {
     position: "absolute",
